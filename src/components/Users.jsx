@@ -1,38 +1,80 @@
 import React from 'react'; 
 import { User } from './User'; 
+import { InstaService } from '../services/instaService';
+import { ErrorMessage } from  './ErrorMessage';
 
 
 
+export class Users extends React.Component { 
+  InstaService = new InstaService();
 
-export const Users = () => { 
+  state = {
+    users: [],
+    error: false
+  }
+
+  componentDidMount(){
+    this.updateUsers();
+  }
+
+
+  updateUsers(){
+    this.InstaService.getAllPosts()
+    .then(this.onUsersLoaded)
+    .catch(this.onError);
+  }
+
+  onUsersLoaded = (posts) => { 
+    this.setState({
+      users: posts,
+      error: false
+    })
+  }
+
+
+  onError = (err) => { 
+    this.setState({
+      error: true
+    })
+  }
   
-  return ( 
-    <div className="right">
-      <User 
-          alt="user" 
-          src="https://i.ytimg.com/vi/x_HL0wiK4Zc/maxresdefault.jpg"
-          name="Vismut S"
-        />
-      <div className="users__block">
+
+  renderItems(arr){ 
+    return arr.map((item) => {
+      const { name, altname, photo, id } = item;
+
+      return ( 
+          <User 
+            key={id}
+            alt={altname} 
+            src={photo}
+            name={name}
+            min
+          /> 
+      )
+    })
+  }
+
+  render(){
+
+    const {error, users} = this.state;
+    if (error) { 
+      return <ErrorMessage />
+    }
+
+    const items = this.renderItems(users);
+
+    return ( 
+      <div className="right">
         <User 
-            alt="user" 
+            alt="myPhoto" 
             src="https://i.ytimg.com/vi/x_HL0wiK4Zc/maxresdefault.jpg"
             name="Vismut S"
-            min
           />
-          <User 
-            alt="user" 
-            src="https://i.ytimg.com/vi/x_HL0wiK4Zc/maxresdefault.jpg"
-            name="Vismut S"
-            min
-          />
-          <User 
-            alt="user" 
-            src="https://i.ytimg.com/vi/x_HL0wiK4Zc/maxresdefault.jpg"
-            name="Vismut S"
-            min
-          />
+        <div className="users__block">
+          {items}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }

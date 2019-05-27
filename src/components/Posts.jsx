@@ -1,16 +1,82 @@
 import React from 'react';
-import { Post } from './Post'
-
-
+import { User } from './User'
+import { InstaService } from '../services/instaService';
+import { ErrorMessage } from  './ErrorMessage';
 
 
 export class Posts extends React.Component {
+  InstaService = new InstaService();
+
+  state = {
+    posts: [],
+    error: false
+  }
+
+  componentDidMount(){
+    this.updatePosts();
+  }
+
+
+  updatePosts(){
+    this.InstaService.getAllPosts()
+    .then(this.onPostsLoaded)
+    .catch(this.onError);
+  }
+
+  onPostsLoaded = (posts) => { 
+    this.setState({
+      posts,
+      error: false
+    })
+  }
+
+
+  onError = (err) => { 
+    this.setState({
+      error: true
+    })
+  }
   
+
+  renderItems(arr){ 
+    return arr.map((item) => {
+      const { name, altname, photo, src, alt, descr, id } = item;
+
+      return ( 
+        <div 
+          className="post"
+          key={id}
+        >
+          <User 
+            alt={altname} 
+            src={photo}
+            name={name}
+            min
+          /> 
+          <img src={src} alt={alt}></img>
+          <div className="post__name">
+            {name}
+          </div>
+          <div className="post__descr">
+            {descr}
+          </div>
+        </div>
+      )
+    })
+  }
+
   render(){
+    const {error, posts} = this.state;
+    if (error) { 
+      return <ErrorMessage />
+    }
+
+    const items = this.renderItems(posts);
+
     return(
       
       <div className="left">
-        <Post alt="nature" src="https://s3-us-west-2.amazonaws.com/uw-s3-cdn/wp-content/uploads/sites/6/2017/11/04133712/waterfall.jpg"/> 
+        {items}
       </div>
     )
   }
