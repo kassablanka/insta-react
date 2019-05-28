@@ -30,6 +30,20 @@ header {
     filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.25));
 }
 
+.spinner {
+    width: 50px;
+    margin-top: 200px;
+}
+
+.left .spinner { 
+    width: 150px;
+}
+
+.palette .spinner { 
+    align-self: center;
+    margin-left: 35%
+}
+
 .h-flex {
     display: flex;
     justify-content: space-between;

@@ -2,7 +2,7 @@ import React from 'react';
 import { User } from './User'; 
 import { InstaService } from '../services/instaService';
 import { ErrorMessage } from  './ErrorMessage';
-
+import spinner from '../spinner.gif';
 
 
 export class Users extends React.Component { 
@@ -10,7 +10,8 @@ export class Users extends React.Component {
 
   state = {
     users: [],
-    error: false
+    error: false,
+    isLoading: true
   }
 
   componentDidMount(){
@@ -27,14 +28,16 @@ export class Users extends React.Component {
   onUsersLoaded = (posts) => { 
     this.setState({
       users: posts,
-      error: false
+      error: false,
+      isLoading: false
     })
   }
 
 
   onError = (err) => { 
     this.setState({
-      error: true
+      error: true,
+      isLoading: false
     })
   }
   
@@ -56,11 +59,22 @@ export class Users extends React.Component {
   }
 
   render(){
+    const {error, users, isLoading} = this.state;
 
-    const {error, users} = this.state;
     if (error) { 
       return <ErrorMessage />
     }
+    else if (isLoading) {
+      return (
+        <div className="right">
+          <img 
+            src={spinner} 
+            alt="spinner"
+            className="spinner"/>
+        </div>
+      )
+    }
+
 
     const items = this.renderItems(users);
 

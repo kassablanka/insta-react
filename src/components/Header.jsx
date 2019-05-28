@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../logo.svg';
+import { Link } from 'react-router-dom';
 
 
 
@@ -11,20 +12,20 @@ export class Header extends React.Component {
 
       <header>
         <div className="container h-flex">
-          <a href="@" className="logo">
+          <Link to="/" className="logo">
             <img src={logo} alt="logo"/>
-          </a>
+          </Link>
           <nav className="links">
             <ul>
               <li>
-                <a href="@" className="menu__links">
+                <Link to="/" className="menu__links">
                   Лента 
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="@" className="menu__links">
+                <Link to="/profile" className="menu__links">
                   Профиль 
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
